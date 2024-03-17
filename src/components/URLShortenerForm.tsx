@@ -102,7 +102,7 @@ function RedirectorComponent() {
   useEffect(() => {
     async function fetchOriginalUrl() {
       try {
-        const response = await axios.get(`${SERVER_ENDPOINTS}/${transformedUrl}`);
+        const response = await axios.get(`${SERVER_ENDPOINTS}/api/url/${transformedUrl}`);
         window.location.href = response.data.destination;
       } catch (error) {
         setError(true);
