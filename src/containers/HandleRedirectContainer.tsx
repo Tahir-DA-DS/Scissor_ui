@@ -7,36 +7,42 @@ const SERVER_ENDPOINTS =
     process.env.REACT_APP_SERVER_ENDPOINT || "http://localhost:4000";
     
 function HandleRedirectContainer(){
-    const {transformedUrl} = useParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+    const [destination, setDestination] = useState<null | string>(null)
+    const [error, setError] = useState() 
+    const { transformedUrl } = useParams<{ transformedUrl: string }>()
 
-  const SERVER_ENDPOINTS = 
-  process.env.REACT_APP_SERVER_ENDPOINT || "http://localhost:4000"
+    useEffect(
+        ()=>{
+            async function getData() {
+                return axios
+                .get(`${SERVER_ENDPOINTS}/:${transformedUrl}`)
+                .then((res)=>setDestination(res.data.destination))
+                .catch((error)=> setError(error.message))
+                
+            }
+            getData()
+        }, [transformedUrl])
 
-  useEffect(() => {
-    async function fetchOriginalUrl() {
-      try {
-        const response = await axios.get(`${SERVER_ENDPOINTS}/${transformedUrl}`);
-        window.location.href = response.data.destination;
-      } catch (error) {
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchOriginalUrl();
-  }, []);
+        useEffect(()=>{
+            if (destination){
+                window.location.replace(destination)
+            }
+        }, [destination])
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+        if(!destination && !error){
+            return (
+                <Box
+                    height ="100%"
+                    display ="flex"
+                    alignItems ="center"
+                    justifyContent = "center"
+                    >
+                    <Spinner/>
+                    </Box>
+            )
+        }
 
-  if (error) {
-    return <div>Error: Unable to redirect to the original URL.</div>;
-  }
-
-  return null;
+        return <p>{error && JSON.stringify(error)}</p>
 }
 
 export default HandleRedirectContainer
