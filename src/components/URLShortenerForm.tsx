@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Box, InputGroup, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
-import axios from 'axios'; // Make sure axios is installed and imported
-import QRCode from 'qrcode.react'; // Install and import QRCode library
+import axios from 'axios'; 
+import QRCode from 'qrcode.react'; 
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
 
 function URLShortenerForm() {
   const [destination, setDestination] = useState('');
@@ -77,6 +78,50 @@ function URLShortenerForm() {
       )}
     </Box>
   );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<URLShortenerForm />} />
+        <Route path="/:transformedUrl" element={<RedirectorComponent />} />
+      </Routes>
+    </Router>
+  );
+}
+
+function RedirectorComponent() {
+  const { transformedUrl } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  const SERVER_ENDPOINTS = 
+  process.env.REACT_APP_SERVER_ENDPOINT || "http://localhost:4000"
+
+  useEffect(() => {
+    async function fetchOriginalUrl() {
+      try {
+        const response = await axios.get(`${SERVER_ENDPOINTS}/${transformedUrl}`);
+        window.location.href = response.data.destination;
+      } catch (error) {
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchOriginalUrl();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: Unable to redirect to the original URL.</div>;
+  }
+
+  return null;
 }
 
 export default URLShortenerForm;
