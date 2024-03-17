@@ -7,6 +7,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomeContainer />} />
+        <Route path="/:transformedUrl" element={<HandleRedirectContainer />} />
         {/* <Route path="/:shortId" element={<HandleRedirectContainer />} /> */}
       </Routes>
     </Router>
