@@ -92,7 +92,7 @@ function App() {
 }
 
 function RedirectorComponent() {
-  const { transformedUrl } = useParams();
+  const {transformedUrl} = useParams();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 

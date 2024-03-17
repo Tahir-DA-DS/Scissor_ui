@@ -7,7 +7,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomeContainer />} />
-        <Route path="/:shortId" element={<HandleRedirectContainer />} />
+        {/* <Route path="/:shortId" element={<HandleRedirectContainer />} /> */}
       </Routes>
     </Router>
   );
