@@ -1,8 +1,8 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { Box, InputGroup, Button, FormControl, FormLabel, Input } from '@chakra-ui/react';
 import axios from 'axios'; 
 import QRCode from 'qrcode.react'; 
-import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
+
 
 function URLShortenerForm() {
   const [destination, setDestination] = useState('');
@@ -80,16 +80,7 @@ function URLShortenerForm() {
   );
 }
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<URLShortenerForm />} />
-        {/* <Route path="/:transformedUrl" element={<RedirectorComponent />} /> */}
-      </Routes>
-    </Router>
-  );
-}
+
 
 // function RedirectorComponent() {
  

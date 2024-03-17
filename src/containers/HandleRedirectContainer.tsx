@@ -1,8 +1,7 @@
 import axios from "axios"
 import {useEffect, useState} from "react"
-import {useParams} from "react-router-dom"
 import {Spinner, Box} from "@chakra-ui/react"
-
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
 const SERVER_ENDPOINTS = 
     process.env.REACT_APP_SERVER_ENDPOINT || "http://localhost:4000";
     
