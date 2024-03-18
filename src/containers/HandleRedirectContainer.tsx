@@ -14,7 +14,7 @@ function HandleRedirectContainer(){
         ()=>{
             async function getData() {
                 return axios
-                .get(`${SERVER_ENDPOINTS}/api/url:${transformedUrl}`)
+                .get(`${SERVER_ENDPOINTS}/:${transformedUrl}`)
                 .then((res)=>setDestination(res.data.destination))
                 .catch((error)=> setError(error.message))
                 
