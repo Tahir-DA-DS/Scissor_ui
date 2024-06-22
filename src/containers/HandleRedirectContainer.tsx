@@ -1,47 +1,48 @@
-import axios from "axios"
-import {useEffect, useState} from "react"
-import {Spinner, Box} from "@chakra-ui/react"
-import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from "react-router-dom";
-const SERVER_ENDPOINTS = 
-    process.env.REACT_APP_SERVER_ENDPOINT || "http://localhost:4000";
-    
-function HandleRedirectContainer(){
-    const [destination, setDestination] = useState<null | string>(null)
-    const [error, setError] = useState() 
-    const { transformedUrl } = useParams<{ transformedUrl: string }>()
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Spinner, Box } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 
-    useEffect(
-        ()=>{
-            async function getData() {
-                return axios
-                .get(`${SERVER_ENDPOINTS}/:${transformedUrl}`)
-                .then((res)=>setDestination(res.data.destination))
-                .catch((error)=> setError(error.message))
-                
-            }
-            getData()
-        }, [transformedUrl])
+const SERVER_ENDPOINTS = process.env.REACT_APP_SERVER_ENDPOINT || "http://localhost:4000";
 
-        useEffect(()=>{
-            if (destination){
-                window.location.replace(destination)
-            }
-        }, [destination])
+function HandleRedirectContainer() {
+  const [destination, setDestination] = useState<null | string>(null);
+  const [error, setError] = useState<string | null>(null);
+  const { transformedUrl } = useParams<{ transformedUrl: string }>();
 
-        if(!destination && !error){
-            return (
-                <Box
-                    height ="100%"
-                    display ="flex"
-                    alignItems ="center"
-                    justifyContent = "center"
-                    >
-                    <Spinner/>
-                    </Box>
-            )
-        }
+  useEffect(() => {
+    async function getData() {
+      try {
+        const res = await axios.get(`${SERVER_ENDPOINTS}/${transformedUrl}`);
+        setDestination(res.data.destination);
+      } catch (error: any) {
+        setError(error.message);
+      }
+    }
 
-        return <p>{error && JSON.stringify(error)}</p>
+    getData();
+  }, [transformedUrl]);
+
+  useEffect(() => {
+    if (destination) {
+      window.location.replace(destination);
+    }
+  }, [destination]);
+
+  if (!destination && !error) {
+    return (
+      <Box
+        height="100%"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Spinner />
+      </Box>
+    );
+  }
+
+  return <p>{error && JSON.stringify(error)}</p>;
 }
 
-export default HandleRedirectContainer
+export default HandleRedirectContainer;

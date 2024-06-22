@@ -1,6 +1,6 @@
-import {BrowserRouter as Router, Routes, Route } from "react-router-dom"
-import HomeContainer from './containers/Home'
-import HandleRedirectContainer from './containers/HandleRedirectContainer'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomeContainer from './containers/Home';
+import HandleRedirectContainer from './containers/HandleRedirectContainer';
 
 function App() {
   return (
@@ -8,7 +8,6 @@ function App() {
       <Routes>
         <Route path="/" element={<HomeContainer />} />
         <Route path="/:transformedUrl" element={<HandleRedirectContainer />} />
-        {/* <Route path="/:shortId" element={<HandleRedirectContainer />} /> */}
       </Routes>
     </Router>
   );
