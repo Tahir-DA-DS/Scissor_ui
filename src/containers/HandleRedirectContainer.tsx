@@ -16,7 +16,13 @@ function HandleRedirectContainer() {
         const res = await axios.get(`${SERVER_ENDPOINTS}/${transformedUrl}`);
         setDestination(res.data.destination);
       } catch (error: any) {
-        setError(error.message);
+        if (error.response) {
+          setError(`Error: ${error.response.status} - ${error.response.data}`);
+        } else if (error.request) {
+          setError('No response from the server.');
+        } else {
+          setError(`Request error: ${error.message}`);
+        }
       }
     }
 
@@ -38,6 +44,7 @@ function HandleRedirectContainer() {
         justifyContent="center"
       >
         <Spinner />
+        <p>Redirecting, please wait...</p>
       </Box>
     );
   }
